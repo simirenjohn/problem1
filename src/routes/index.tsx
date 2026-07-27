@@ -70,6 +70,7 @@ import {
 } from "@/lib/projects";
 
 const MapView = lazy(() => import("@/components/map/MapView"));
+const GpsCompass = lazy(() => import("@/components/gps/GpsCompass"));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -877,9 +878,6 @@ function Index() {
                 <ToggleBtn active={measureMode === "area"} onClick={() => startMeasure("area")}>
                   <Hexagon className="mr-2 h-3.5 w-3.5" /> Area
                 </ToggleBtn>
-                <SbBtn className="col-span-2" onClick={handleGps}>
-                  <Crosshair className="mr-2 h-3.5 w-3.5" /> My GPS
-                </SbBtn>
               </div>
               {measureMode !== "none" && (
                 <div className="mt-2 space-y-1.5">
@@ -1007,6 +1005,16 @@ function Index() {
           <div className="pointer-events-none absolute left-1/2 top-3 z-[1000] -translate-x-1/2 rounded-full border border-orange-500/40 bg-orange-500/15 px-3 py-1.5 text-xs text-orange-100 shadow-lg backdrop-blur">
             {measureMode === "distance" ? "Measure distance" : "Measure area"} — {measurePoints.length} point{measurePoints.length === 1 ? "" : "s"}
           </div>
+        )}
+
+        {mounted && (
+          <Suspense fallback={null}>
+            <GpsCompass
+              points={activeProject?.points ?? []}
+              onPosition={setGpsPosition}
+              onLocate={(p) => setFlyTo({ lat: p.lat, lng: p.lng, zoom: 18 })}
+            />
+          </Suspense>
         )}
       </div>
     </div>
