@@ -5,7 +5,6 @@ import {
   Search,
   Ruler,
   Hexagon,
-  Crosshair,
   Layers,
   X,
   Download,
@@ -252,30 +251,12 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [measureMode, measurePoints]);
 
-  // --- GPS ---
+  // --- GPS (driven by the compass widget) ---
   const [gpsPosition, setGpsPosition] = useState<{
     lat: number;
     lng: number;
     accuracy: number;
   } | null>(null);
-  const [gpsError, setGpsError] = useState<string | null>(null);
-  const handleGps = () => {
-    setGpsError(null);
-    if (!("geolocation" in navigator)) {
-      setGpsError("Geolocation not supported by this browser.");
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) =>
-        setGpsPosition({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-          accuracy: pos.coords.accuracy,
-        }),
-      (err) => setGpsError(err.message),
-      { enableHighAccuracy: true, timeout: 10000 },
-    );
-  };
 
   // --- UTM coordinate entry (Arc 1960, Southern hemisphere — Kenya) ---
   const [eastingInput, setEastingInput] = useState("");
@@ -916,7 +897,6 @@ function Index() {
                   </ul>
                 </>
               )}
-              {gpsError && <p className="mt-2 text-xs text-rose-400">{gpsError}</p>}
             </Section>
 
             {/* Parcel info */}
