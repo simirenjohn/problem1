@@ -48,7 +48,7 @@ const SIANA_CENTER: [number, number] = [-1.552, 35.305];
 function FlyHandler({ target }: { target: Props["flyTo"] }) {
   const map = useMap();
   useEffect(() => {
-    if (target) map.flyTo([target.lat, target.lng], target.zoom ?? 17, { duration: 0.8 });
+    if (target) map.flyTo([target.lat, target.lng], target.zoom ?? 21, { duration: 0.8 });
   }, [target, map]);
   return null;
 }
@@ -59,7 +59,7 @@ function FitHandler({ bounds }: { bounds: Array<[number, number]> | null | undef
     if (bounds && bounds.length >= 2) {
       map.fitBounds(bounds as L.LatLngBoundsExpression, { padding: [40, 40] });
     } else if (bounds && bounds.length === 1) {
-      map.flyTo(bounds[0], 17, { duration: 0.6 });
+      map.flyTo(bounds[0], 21, { duration: 0.6 });
     }
   }, [bounds, map]);
   return null;
@@ -68,7 +68,7 @@ function FitHandler({ bounds }: { bounds: Array<[number, number]> | null | undef
 function GpsHandler({ position }: { position: Props["gpsPosition"] }) {
   const map = useMap();
   useEffect(() => {
-    if (position) map.flyTo([position.lat, position.lng], 16, { duration: 0.8 });
+    if (position) map.flyTo([position.lat, position.lng], 20, { duration: 0.8 });
   }, [position, map]);
   return null;
 }
@@ -176,7 +176,11 @@ export default function MapView({
             url="https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
             subdomains={["0", "1", "2", "3"]}
             maxZoom={22}
-            maxNativeZoom={20}
+            maxNativeZoom={21}
+            keepBuffer={4}
+            updateWhenIdle={false}
+            updateWhenZooming={false}
+            crossOrigin="anonymous"
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="Google Satellite">
@@ -185,7 +189,11 @@ export default function MapView({
             url="https://mt{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
             subdomains={["0", "1", "2", "3"]}
             maxZoom={22}
-            maxNativeZoom={20}
+            maxNativeZoom={21}
+            keepBuffer={4}
+            updateWhenIdle={false}
+            updateWhenZooming={false}
+            crossOrigin="anonymous"
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="Esri World Imagery">
@@ -194,6 +202,10 @@ export default function MapView({
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             maxZoom={22}
             maxNativeZoom={18}
+            keepBuffer={4}
+            updateWhenIdle={false}
+            updateWhenZooming={false}
+            crossOrigin="anonymous"
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="OpenStreetMap">
@@ -202,6 +214,10 @@ export default function MapView({
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={22}
             maxNativeZoom={19}
+            keepBuffer={4}
+            updateWhenIdle={false}
+            updateWhenZooming={false}
+            crossOrigin="anonymous"
           />
         </LayersControl.BaseLayer>
         <LayersControl.Overlay name="Esri reference labels">
@@ -210,6 +226,10 @@ export default function MapView({
             url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
             maxZoom={22}
             maxNativeZoom={16}
+            keepBuffer={4}
+            updateWhenIdle={false}
+            updateWhenZooming={false}
+            crossOrigin="anonymous"
           />
         </LayersControl.Overlay>
       </LayersControl>
