@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Crosshair, Navigation2, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Crosshair, Navigation2, X, ChevronDown, ChevronUp, Volume2, VolumeX } from "lucide-react";
 import type { CoordPoint } from "@/lib/projects";
 
 type Props = {
@@ -57,8 +57,54 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
   const [err, setErr] = useState<string | null>(null);
   const [heading, setHeading] = useState<number | null>(null); // device heading, deg
   const [targetId, setTargetId] = useState<string>("");
+  const [muted, setMuted] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("gps-compass-muted") === "1";
+  });
   const watchIdRef = useRef<number | null>(null);
   const orientationBoundRef = useRef(false);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const lastBeepRef = useRef<number>(0);
+  const arrivedRef = useRef<boolean>(false);
+
+  const ensureAudio = () => {
+    if (typeof window === "undefined") return null;
+    if (!audioCtxRef.current) {
+      const Ctx =
+        (window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext })
+          .AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (Ctx) audioCtxRef.current = new Ctx();
+    }
+    const ctx = audioCtxRef.current;
+    if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {});
+    return ctx;
+  };
+
+  const beep = (freq: number, durationMs: number, gain = 0.15) => {
+    const ctx = audioCtxRef.current;
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(gain, ctx.currentTime + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + durationMs / 1000);
+    osc.connect(g).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + durationMs / 1000 + 0.02);
+  };
+
+  const toggleMuted = () => {
+    setMuted((m) => {
+      const next = !m;
+      try {
+        window.localStorage.setItem("gps-compass-muted", next ? "1" : "0");
+      } catch {}
+      return next;
+    });
+  };
 
   const target = useMemo(
     () => points.find((p) => p.id === targetId) ?? null,
@@ -153,6 +199,55 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
   const targetDistance =
     pos && target ? haversine(pos.lat, pos.lng, target.lat, target.lng) : null;
 
+  // Proximity beep scheduler
+  useEffect(() => {
+    if (!tracking || muted || targetDistance === null) {
+      arrivedRef.current = false;
+      return;
+    }
+    const d = targetDistance;
+    if (d > 50) {
+      arrivedRef.current = false;
+      return;
+    }
+    let interval: number;
+    let freq: number;
+    if (d > 20) {
+      interval = 2000;
+      freq = 600;
+    } else if (d > 5) {
+      interval = 800;
+      freq = 900;
+    } else if (d > 1) {
+      interval = 300;
+      freq = 1200;
+    } else {
+      interval = 150;
+      freq = 1500;
+    }
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    // Arrival chime (one-shot when first entering <1m)
+    if (d <= 1 && !arrivedRef.current) {
+      arrivedRef.current = true;
+      beep(1200, 120);
+      window.setTimeout(() => beep(1600, 120), 140);
+      window.setTimeout(() => beep(2000, 200), 300);
+    }
+    if (d > 1) arrivedRef.current = false;
+
+    const tick = () => {
+      const now = performance.now();
+      if (now - lastBeepRef.current >= interval) {
+        lastBeepRef.current = now;
+        beep(freq, 90);
+      }
+    };
+    tick();
+    const id = window.setInterval(tick, Math.min(interval, 200));
+    return () => window.clearInterval(id);
+  }, [tracking, muted, targetDistance]);
+
   // Rose rotation: rotate the rose so that current heading points up.
   // If no heading available, keep N up.
   const roseRotation = heading !== null ? -heading : 0;
@@ -169,6 +264,15 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
     onPosition?.(null);
   };
 
+  const accuracyColor =
+    pos == null
+      ? "text-slate-400"
+      : pos.accuracy <= 5
+        ? "text-emerald-400"
+        : pos.accuracy <= 15
+          ? "text-amber-300"
+          : "text-rose-400";
+
   // Collapsed floating button
   if (!expanded) {
     return (
@@ -176,14 +280,22 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
         onClick={() => {
           setExpanded(true);
           if (!tracking) setTracking(true);
+          ensureAudio();
         }}
-        className="absolute bottom-4 right-4 z-[1000] flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/40 transition hover:scale-105 active:scale-95"
+        className="absolute bottom-4 right-4 z-[1000] flex h-14 w-14 flex-col items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/40 transition hover:scale-105 active:scale-95"
         aria-label="Open GPS compass"
         title="GPS compass"
       >
         <Crosshair className="h-6 w-6" />
         {tracking && (
           <span className="absolute right-1 top-1 h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_oklch(0.75_0.18_150)]" />
+        )}
+        {pos && (
+          <span
+            className={`absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-slate-900/90 px-1.5 py-0.5 text-[9px] font-mono font-semibold ${accuracyColor}`}
+          >
+            ±{pos.accuracy.toFixed(0)}m
+          </span>
         )}
       </button>
     );
@@ -208,6 +320,14 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
           </span>
         </div>
         <div className="flex items-center gap-1">
+          <button
+            onClick={toggleMuted}
+            className="flex h-6 w-6 items-center justify-center rounded-md text-slate-400 hover:bg-white/10 hover:text-white"
+            aria-label={muted ? "Unmute proximity beep" : "Mute proximity beep"}
+            title={muted ? "Unmute beep" : "Mute beep"}
+          >
+            {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </button>
           <button
             onClick={() => setExpanded(false)}
             className="flex h-6 w-6 items-center justify-center rounded-md text-slate-400 hover:bg-white/10 hover:text-white"
@@ -353,7 +473,7 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
           </div>
           <div className="rounded-md bg-white/5 px-2 py-1.5">
             <div className="text-[9px] uppercase tracking-widest text-slate-400">Accuracy</div>
-            <div className="font-mono text-sm text-white">
+            <div className={`font-mono text-sm font-semibold ${accuracyColor}`}>
               {pos ? `±${pos.accuracy.toFixed(0)} m` : "—"}
             </div>
           </div>
