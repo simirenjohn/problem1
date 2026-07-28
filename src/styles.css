@@ -142,3 +142,8 @@
     color: var(--color-foreground);
   }
 }
+
+.leaflet-tile {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
