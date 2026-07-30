@@ -968,6 +968,7 @@ function Index() {
           </div>
         )}
       </aside>
+      </>
 
       {/* Map */}
       <div className="relative flex-1">
