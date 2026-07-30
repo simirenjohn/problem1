@@ -193,6 +193,10 @@ function Index() {
 
   // --- Map state ---
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  // Collapse the sidebar by default on small screens so the map fills the view.
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) setSidebarOpen(false);
+  }, []);
   const [openSections, setOpenSections] = useState<Record<SectionId, boolean>>({
     projects: true,
     search: false,
@@ -475,9 +479,19 @@ function Index() {
   return (
     <div className="relative flex h-screen w-screen overflow-hidden bg-[oklch(0.14_0.03_260)] text-foreground">
       {/* Sidebar */}
+      <>
+        {sidebarOpen && (
+          <div
+            className="absolute inset-0 z-[1050] bg-black/50 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden
+          />
+        )}
       <aside
-        className={`relative z-[1100] flex h-full shrink-0 flex-col border-r border-white/5 bg-gradient-to-b from-[oklch(0.18_0.04_265)] via-[oklch(0.15_0.035_262)] to-[oklch(0.12_0.03_260)] text-slate-100 shadow-2xl transition-[width] duration-200 ${
-          sidebarOpen ? "w-[360px]" : "w-14"
+        className={`z-[1100] flex h-full shrink-0 flex-col border-r border-white/5 bg-gradient-to-b from-[oklch(0.18_0.04_265)] via-[oklch(0.15_0.035_262)] to-[oklch(0.12_0.03_260)] text-slate-100 shadow-2xl transition-[width] duration-200 md:relative ${
+          sidebarOpen
+            ? "absolute inset-y-0 left-0 w-[min(20rem,88vw)] md:static md:w-[340px] lg:w-[360px]"
+            : "relative w-14"
         }`}
       >
         {/* Sidebar header */}
@@ -954,6 +968,7 @@ function Index() {
           </div>
         )}
       </aside>
+      </>
 
       {/* Map */}
       <div className="relative flex-1">

@@ -282,17 +282,17 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
           if (!tracking) setTracking(true);
           ensureAudio();
         }}
-        className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] flex h-14 w-14 flex-col items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/40 transition hover:scale-105 active:scale-95"
+        className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] flex h-20 w-20 flex-col items-center justify-center rounded-full border-2 border-white/20 bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/50 transition hover:scale-105 active:scale-95 sm:h-[5.5rem] sm:w-[5.5rem]"
         aria-label="Open GPS compass"
         title="GPS compass"
       >
-        <Crosshair className="h-6 w-6" />
+        <Crosshair className="h-9 w-9 sm:h-10 sm:w-10" />
         {tracking && (
-          <span className="absolute right-1 top-1 h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_oklch(0.75_0.18_150)]" />
+          <span className="absolute right-2 top-2 h-3 w-3 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_oklch(0.75_0.18_150)]" />
         )}
         {pos && (
           <span
-            className={`absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-slate-900/90 px-1.5 py-0.5 text-[9px] font-mono font-semibold ${accuracyColor}`}
+            className={`absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-slate-900/90 px-2 py-0.5 text-[10px] font-mono font-semibold ${accuracyColor}`}
           >
             ±{pos.accuracy.toFixed(0)}m
           </span>
@@ -302,7 +302,7 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
   }
 
   return (
-    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] max-h-[calc(100%-5rem)] w-[280px] overflow-y-auto rounded-2xl border border-white/10 bg-slate-900/85 text-slate-100 shadow-2xl shadow-black/50 backdrop-blur-xl">
+    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-2 z-[1200] max-h-[calc(100%-5rem)] w-[min(20rem,calc(100vw-1rem))] overflow-y-auto rounded-2xl border border-white/10 bg-slate-900/85 text-slate-100 shadow-2xl shadow-black/50 backdrop-blur-xl sm:right-4 sm:w-[300px]">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
         <div className="flex items-center gap-2">
