@@ -1,37 +1,28 @@
-## Goals
-1. Faster/sharper tile loading (pixel build-up feels slow).
-2. Flying to a point should land at the highest useful resolution automatically.
-3. Audible beep as the user approaches a target coordinate in the GPS compass.
-4. Show live GPS accuracy more prominently.
+## What I found
 
-## Changes
+I loaded your live site (problem1.lovable.app) in a browser and checked the published files:
 
-### 1. Faster tile rendering — `src/components/map/MapView.tsx`
-On every `<TileLayer>`:
-- `keepBuffer={4}` (pre-load a wider ring around the viewport)
-- `updateWhenIdle={false}` + `updateWhenZooming={false}` (paint tiles progressively but avoid firing during pinch)
-- `crossOrigin="anonymous"` and `tileSize={256}`
-- Raise the Google hybrid/satellite `maxNativeZoom` from 20 → 21 (Google serves z21 in most areas; Leaflet already upscales cleanly beyond that thanks to `maxZoom={22}`)
-- Add a global CSS rule for `.leaflet-tile { image-rendering: -webkit-optimize-contrast; }` in `src/styles.css` so upscaled tiles look crisper instead of blurry.
+- The compass code **is** deployed — the button exists in the page.
+- But on the published site the floating compass button sits in the bottom-right corner **underneath the "Edit with Lovable" badge and the Leaflet attribution bar**, so on a phone it's mostly covered and looks missing/untappable. In the Lovable preview that badge isn't in the way, which is why it looks fine to you.
+- The published page also throws React error #419 (a server-render Suspense failure) on first load, which can blank the map area briefly before it recovers.
 
-### 2. Fly-to at maximum resolution
-Change `FlyHandler` and `FitHandler` so any fly action (from coordinate list, project fit, GPS "Center", target selection) targets **zoom 21** by default instead of 17. `flyTo` calls in `src/routes/index.tsx` that don't pass a `zoom` will inherit the new default. Existing callers that pass a zoom keep their value.
+## Plan
 
-### 3. Proximity beep + louder accuracy — `src/components/gps/GpsCompass.tsx`
-- Add a small WebAudio helper (no asset) that generates a short sine-wave beep. Frequency and repeat interval scale with distance:
-  - > 50 m: silent
-  - 50–20 m: single beep every 2 s (low pitch, 600 Hz)
-  - 20–5 m: beep every 800 ms (900 Hz)
-  - 5–1 m: beep every 300 ms (1200 Hz)
-  - < 1 m: continuous fast chirp (1500 Hz) + one-shot "arrived" chime
-- Trigger on the existing `targetDistance` computation via a `useEffect` timer; unlock the AudioContext on the first user interaction (the "Start tracking" / expand button already provides a user gesture).
-- Add a mute/unmute toggle icon in the compass header (volume-on/off), persisted to `localStorage`.
-- Promote the accuracy readout: colour-code it (green ≤5 m, amber ≤15 m, red >15 m), and also render the accuracy value on the collapsed floating button as a tiny pill so the user always sees it without expanding.
+1. **Reposition / raise the compass control**
+   - Move the collapsed compass button up above the attribution + badge strip (extra bottom offset, safe-area aware) and raise its stacking order so nothing overlaps it.
+   - Apply the same offset to the expanded compass panel so its bottom rows (Start tracking / Center) aren't covered on small screens.
+   - Verify at 600px-wide mobile viewport against the live layout.
 
-### 4. No other files change
-Business logic, projects, coords, OCR — untouched.
+2. **Remove the SSR Suspense error**
+   - Render the lazily loaded map and compass only after hydration in a way that doesn't create a server-rendered Suspense boundary, so the published build stops throwing React #419 and paints cleanly on first load.
+
+3. **Verify and republish**
+   - Re-check the published URL in a headless browser: compass button visible and clickable, no page errors.
+   - Note: publishing frontend changes requires clicking **Update** in the Publish dialog — I'll flag that when the fix is in.
+
+Optional: if you're on a paid plan, the "Edit with Lovable" badge can be hidden entirely, which also frees that corner. Tell me if you want that.
 
 ## Technical notes
-- Leaflet's `keepBuffer` + `updateWhenIdle=false` is the standard fix for the "grey tiles filling in slowly" symptom; combined with a higher `maxNativeZoom`, deep zooms will fetch real tiles instead of upscaling from z18.
-- WebAudio `OscillatorNode` + `GainNode` is enough — no audio file needed, keeping bundle size flat.
-- All beep scheduling lives inside `GpsCompass`; cleaned up when tracking stops or the component unmounts.
+
+- `src/components/gps/GpsCompass.tsx`: change `bottom-4` to a larger, safe-area-aware offset (`bottom-[calc(env(safe-area-inset-bottom)+3.5rem)]`) on both the collapsed button and expanded panel; keep `z-[1000]` or raise as needed.
+- `src/routes/index.tsx`: keep the `mounted` gate but drop the SSR-visible `Suspense` boundaries (mount-gated dynamic import) so no boundary is attempted during server rendering.
