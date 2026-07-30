@@ -74,11 +74,11 @@ const GpsCompass = lazy(() => import("@/components/gps/GpsCompass"));
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mobille RTK" },
+      { title: "RTK mobile app" },
       {
         name: "description",
         content:
-          "A mobile RTK like app that makes  surveyor work  easy",
+          "Rtk mobile app tjat enable precision mapping and survey including beacon identifier",
       },
     ],
   }),
