@@ -282,7 +282,7 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
           if (!tracking) setTracking(true);
           ensureAudio();
         }}
-        className="absolute bottom-4 right-4 z-[1000] flex h-14 w-14 flex-col items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/40 transition hover:scale-105 active:scale-95"
+        className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] flex h-14 w-14 flex-col items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/40 transition hover:scale-105 active:scale-95"
         aria-label="Open GPS compass"
         title="GPS compass"
       >
@@ -302,7 +302,7 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
   }
 
   return (
-    <div className="absolute bottom-4 right-4 z-[1000] w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-slate-900/85 text-slate-100 shadow-2xl shadow-black/50 backdrop-blur-xl">
+    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] max-h-[calc(100%-5rem)] w-[280px] overflow-y-auto overflow-hidden rounded-2xl border border-white/10 bg-slate-900/85 text-slate-100 shadow-2xl shadow-black/50 backdrop-blur-xl">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
         <div className="flex items-center gap-2">
