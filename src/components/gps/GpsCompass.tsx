@@ -302,7 +302,7 @@ export default function GpsCompass({ points, onPosition, onLocate }: Props) {
   }
 
   return (
-    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] max-h-[calc(100%-5rem)] w-[280px] overflow-y-auto overflow-hidden rounded-2xl border border-white/10 bg-slate-900/85 text-slate-100 shadow-2xl shadow-black/50 backdrop-blur-xl">
+    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+3.75rem)] right-4 z-[1200] max-h-[calc(100%-5rem)] w-[280px] overflow-y-auto rounded-2xl border border-white/10 bg-slate-900/85 text-slate-100 shadow-2xl shadow-black/50 backdrop-blur-xl">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
         <div className="flex items-center gap-2">
