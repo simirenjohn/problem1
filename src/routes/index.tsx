@@ -74,11 +74,11 @@ const GpsCompass = lazy(() => import("@/components/gps/GpsCompass"));
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Siana RIM Web Map — Parcel Viewer" },
+      { title: "Mobille RTK" },
       {
         name: "description",
         content:
-          "Plot Arc 1960 UTM coordinates on satellite imagery for Narok land surveys.",
+          "A mobile RTK like app that makes  surveyor work  easy",
       },
     ],
   }),
