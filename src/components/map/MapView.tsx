@@ -67,11 +67,18 @@ function FitHandler({ bounds }: { bounds: Array<[number, number]> | null | undef
 
 function GpsHandler({ position }: { position: Props["gpsPosition"] }) {
   const map = useMap();
+  const didCenter = useRef(false);
   useEffect(() => {
-    if (position) map.flyTo([position.lat, position.lng], 20, { duration: 0.8 });
+    // Only center on the very first fix; afterwards the user stays in control
+    // of pan/zoom so they can zoom out and see other points.
+    if (position && !didCenter.current) {
+      didCenter.current = true;
+      map.flyTo([position.lat, position.lng], 20, { duration: 0.8 });
+    }
   }, [position, map]);
   return null;
 }
+
 
 function MeasureInteractionLayer({
   mode,
