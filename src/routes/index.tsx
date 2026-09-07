@@ -477,43 +477,43 @@ function Index() {
   };
 
   return (
-    <div className="relative flex h-screen w-screen overflow-hidden bg-[oklch(0.14_0.03_260)] text-foreground">
+    <div className="relative flex h-screen w-screen overflow-hidden bg-slate-50 text-foreground">
       {/* Sidebar */}
       <>
         {sidebarOpen && (
           <div
-            className="absolute inset-0 z-[1050] bg-black/50 md:hidden"
+            className="absolute inset-0 z-[1050] bg-black/30 md:hidden"
             onClick={() => setSidebarOpen(false)}
             aria-hidden
           />
         )}
       <aside
-        className={`z-[1100] flex h-full shrink-0 flex-col border-r border-white/5 bg-gradient-to-b from-[oklch(0.18_0.04_265)] via-[oklch(0.15_0.035_262)] to-[oklch(0.12_0.03_260)] text-slate-100 shadow-2xl transition-[width] duration-200 md:relative ${
+        className={`z-[1100] flex h-full shrink-0 flex-col border-r border-slate-200 bg-white text-slate-800 shadow-xl shadow-slate-200/50 transition-[width] duration-200 md:relative ${
           sidebarOpen
             ? "absolute inset-y-0 left-0 w-[min(20rem,88vw)] md:static md:w-[340px] lg:w-[360px]"
             : "relative w-14"
         }`}
       >
         {/* Sidebar header */}
-        <div className="relative flex h-14 items-center justify-between border-b border-white/5 px-3">
-          <div className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+        <div className="relative flex h-14 items-center justify-between border-b border-slate-200 px-3">
+          <div className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
           {sidebarOpen ? (
             <div className="flex items-center gap-2.5 pl-1">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/30">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/30">
                 <MapPin className="h-4 w-4 text-white" />
               </div>
               <div className="leading-tight">
-                <div className="text-sm font-semibold tracking-tight text-white">Siana RIM</div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-cyan-300/80">Field Surveyor</div>
+                <div className="text-sm font-semibold tracking-tight text-slate-800">Siana RIM</div>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-cyan-700">Field Surveyor</div>
               </div>
             </div>
           ) : (
-            <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/30">
+            <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/30">
               <MapPin className="h-4 w-4 text-white" />
             </div>
           )}
           <button
-            className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-white/5 hover:text-white"
+            className="flex h-7 w-7 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
             onClick={() => setSidebarOpen((o) => !o)}
             aria-label="Toggle sidebar"
           >
@@ -532,7 +532,7 @@ function Index() {
               id="projects"
               icon={<FolderOpen className="h-3.5 w-3.5" />}
               title="Project"
-              accent="from-cyan-400 to-blue-500"
+              accent="from-cyan-500 to-blue-600"
               open={openSections.projects}
               onToggle={toggleSection}
             >
@@ -540,10 +540,10 @@ function Index() {
                 <select
                   value={activeId}
                   onChange={(e) => switchProject(e.target.value)}
-                  className="h-9 w-full rounded-md border border-white/10 bg-white/5 px-2 text-sm text-white focus:border-cyan-400/60 focus:outline-none"
+                  className="h-9 w-full rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-800 focus:border-cyan-500 focus:outline-none"
                 >
                   {projects.map((p) => (
-                    <option key={p.id} value={p.id} className="bg-slate-800">
+                    <option key={p.id} value={p.id} className="bg-white">
                       {p.name}
                     </option>
                   ))}
@@ -555,7 +555,7 @@ function Index() {
                   <SbBtn onClick={() => importInputRef.current?.click()}><Upload className="mr-1 h-3.5 w-3.5" /> Import</SbBtn>
                   <button
                     onClick={handleDeleteProject}
-                    className="col-span-2 flex items-center justify-center rounded-md py-1.5 text-[11px] text-rose-400/80 transition hover:bg-rose-500/10 hover:text-rose-300"
+                    className="col-span-2 flex items-center justify-center rounded-md py-1.5 text-[11px] text-rose-600/80 transition hover:bg-rose-50 hover:text-rose-700"
                   >
                     <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete project
                   </button>
@@ -572,8 +572,8 @@ function Index() {
                   }}
                 />
                 {activeProject && (
-                  <div className="flex items-center gap-2 rounded-md bg-white/5 px-2 py-1.5 text-[10px] text-slate-400">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_oklch(0.7_0.18_150)]" />
+                  <div className="flex items-center gap-2 rounded-md bg-slate-50 px-2 py-1.5 text-[10px] text-slate-500">
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
                     {activeProject.points.length} pts · {activeProject.measurements.length} meas · saved {new Date(activeProject.updatedAt).toLocaleTimeString()}
                   </div>
                 )}
@@ -586,7 +586,7 @@ function Index() {
                 id="search"
                 icon={<Search className="h-3.5 w-3.5" />}
                 title="Search parcels"
-                accent="from-violet-400 to-fuchsia-500"
+                accent="from-violet-500 to-fuchsia-600"
                 open={openSections.search}
                 onToggle={toggleSection}
               >
@@ -595,16 +595,16 @@ function Index() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="e.g. SIANA/001"
-                    className="h-9 border-white/10 bg-white/5 text-white placeholder:text-slate-500"
+                    className="h-9 border-slate-200 bg-white text-slate-800 placeholder:text-slate-400"
                   />
                   {query && (
-                    <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:bg-white/10" onClick={() => setQuery("")}>
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-500 hover:bg-slate-100" onClick={() => setQuery("")}>
                       <X className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
                 {query && (
-                  <div className="mt-2 max-h-48 overflow-y-auto rounded-md border border-white/10 bg-black/20">
+                  <div className="mt-2 max-h-48 overflow-y-auto rounded-md border border-slate-200 bg-slate-50">
                     {results.length === 0 ? (
                       <div className="p-3 text-xs text-slate-500">No matches</div>
                     ) : (
@@ -614,7 +614,7 @@ function Index() {
                           <button
                             key={pn}
                             onClick={() => handleSelect(pn)}
-                            className="block w-full px-3 py-2 text-left text-sm text-slate-200 hover:bg-white/5"
+                            className="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
                           >
                             {pn}
                           </button>
@@ -631,7 +631,7 @@ function Index() {
               id="layers"
               icon={<Layers className="h-3.5 w-3.5" />}
               title="Layers"
-              accent="from-emerald-400 to-teal-500"
+              accent="from-emerald-500 to-teal-600"
               open={openSections.layers}
               onToggle={toggleSection}
             >
@@ -641,7 +641,7 @@ function Index() {
                   {showParcels ? "Hide parcels" : "Show parcels"}
                 </SbBtn>
               ) : (
-                <p className="rounded-md border border-dashed border-white/10 bg-white/[0.02] px-3 py-2 text-[11px] text-slate-400">
+                <p className="rounded-md border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-[11px] text-slate-500">
                   No Siana RIM parcels loaded yet. Import a GeoJSON / KML / SHP via the Import section once you have the data.
                 </p>
               )}
@@ -655,7 +655,7 @@ function Index() {
               id="coords"
               icon={<Navigation className="h-3.5 w-3.5" />}
               title="UTM coordinates"
-              accent="from-cyan-400 to-sky-500"
+              accent="from-cyan-500 to-sky-600"
               open={openSections.coords}
               onToggle={toggleSection}
             >
@@ -675,7 +675,7 @@ function Index() {
                         className={`rounded-md py-1.5 text-xs font-medium transition ${
                           utmZone === z
                             ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow shadow-cyan-500/30"
-                            : "bg-white/5 text-slate-300 hover:bg-white/10"
+                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                         }`}
                       >
                         Zone {z}
@@ -684,9 +684,9 @@ function Index() {
                   </div>
                 </div>
 
-                <p className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-1.5 text-[10px] leading-relaxed text-slate-400">
-                  Datum: <strong className="text-slate-200">Arc 1960 / Clarke 1880 / UTM {utmZone}S</strong> ·
-                  shift preset: <strong className="text-slate-200">{datumPreset === "epsg" ? "EPSG (−157,−2,−299)" : datumPreset === "controller" ? "Controller (+163,+6,+298)" : "Custom"}</strong>
+                <p className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1.5 text-[10px] leading-relaxed text-slate-500">
+                  Datum: <strong className="text-slate-800">Arc 1960 / Clarke 1880 / UTM {utmZone}S</strong> ·
+                  shift preset: <strong className="text-slate-800">{datumPreset === "epsg" ? "EPSG (−157,−2,−299)" : datumPreset === "controller" ? "Controller (+163,+6,+298)" : "Custom"}</strong>
                 </p>
 
                 <LabeledInput
@@ -703,32 +703,32 @@ function Index() {
                 >
                   <Plus className="mr-2 h-4 w-4" /> Add point
                 </button>
-                {coordError && <p className="text-xs text-rose-400">{coordError}</p>}
+                {coordError && <p className="text-xs text-rose-600">{coordError}</p>}
               </div>
 
               {/* Points list */}
               {activeProject && activeProject.points.length > 0 && (
                 <>
-                  <Separator className="my-3 bg-white/10" />
+                  <Separator className="my-3 bg-slate-200" />
                   <div className="mb-2 flex items-center justify-between">
-                    <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                    <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                       Points · {activeProject.points.length}
                     </h3>
-                    <button onClick={clearAllPoints} className="text-[10px] text-slate-500 hover:text-rose-400">Clear</button>
+                    <button onClick={clearAllPoints} className="text-[10px] text-slate-500 hover:text-rose-600">Clear</button>
                   </div>
                   <ul className="max-h-48 space-y-1 overflow-y-auto pr-1">
                     {activeProject.points.map((p, i) => (
-                      <li key={p.id} className="group flex items-center gap-2 rounded-md border border-white/5 bg-white/[0.03] px-2 py-1.5 text-xs transition hover:border-cyan-400/30 hover:bg-cyan-400/5">
-                        <span className="font-mono text-[10px] text-cyan-400/70">{String(i + 1).padStart(2, "0")}</span>
+                      <li key={p.id} className="group flex items-center gap-2 rounded-md border border-slate-100 bg-slate-50 px-2 py-1.5 text-xs transition hover:border-cyan-400/30 hover:bg-cyan-50/50">
+                        <span className="font-mono text-[10px] text-cyan-600/70">{String(i + 1).padStart(2, "0")}</span>
                         <button
-                          className="min-w-0 flex-1 truncate text-left text-slate-200 hover:text-white"
+                          className="min-w-0 flex-1 truncate text-left text-slate-700 hover:text-slate-900"
                           onClick={() => setFlyTo({ lat: p.lat, lng: p.lng, zoom: 18 })}
                           title={`${p.lat.toFixed(6)}, ${p.lng.toFixed(6)}`}
                         >
                           {p.label}
                         </button>
                         <button className="opacity-0 transition group-hover:opacity-100" onClick={() => removePoint(p.id)} aria-label="Remove">
-                          <X className="h-3.5 w-3.5 text-rose-400" />
+                          <X className="h-3.5 w-3.5 text-rose-500" />
                         </button>
                       </li>
                     ))}
@@ -746,10 +746,10 @@ function Index() {
                     </SbBtn>
                   </div>
                   {coordShape === "line" && lineDist > 0 && (
-                    <p className="mt-2 text-[11px] text-cyan-300/80">Total length: <span className="font-semibold text-white">{formatDistance(lineDist)}</span></p>
+                    <p className="mt-2 text-[11px] text-cyan-700">Total length: <span className="font-semibold text-slate-900">{formatDistance(lineDist)}</span></p>
                   )}
                   {coordShape === "polygon" && polyArea > 0 && (
-                    <p className="mt-2 text-[11px] text-cyan-300/80">Area: <span className="font-semibold text-white">{formatArea(polyArea)}</span></p>
+                    <p className="mt-2 text-[11px] text-cyan-700">Area: <span className="font-semibold text-slate-900">{formatArea(polyArea)}</span></p>
                   )}
                 </>
               )}
@@ -760,15 +760,15 @@ function Index() {
               id="datum"
               icon={<Globe2 className="h-3.5 w-3.5" />}
               title="Datum & projection"
-              accent="from-amber-400 to-orange-500"
+              accent="from-amber-500 to-orange-600"
               open={openSections.datum}
               onToggle={toggleSection}
             >
               <div className="space-y-2.5">
-                <div className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-1.5 text-[10px] leading-relaxed text-slate-400">
-                  <div>Projection: <strong className="text-slate-200">UTM Zone {utmZone}S</strong></div>
-                  <div>Ellipsoid: <strong className="text-slate-200">Clarke 1880 (RGS)</strong></div>
-                  <div>Datum: <strong className="text-slate-200">Arc 1960 → WGS 84</strong></div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1.5 text-[10px] leading-relaxed text-slate-500">
+                  <div>Projection: <strong className="text-slate-800">UTM Zone {utmZone}S</strong></div>
+                  <div>Ellipsoid: <strong className="text-slate-800">Clarke 1880 (RGS)</strong></div>
+                  <div>Datum: <strong className="text-slate-800">Arc 1960 → WGS 84</strong></div>
                 </div>
 
                 <div>
@@ -785,7 +785,7 @@ function Index() {
                         className={`rounded-md py-1.5 text-[11px] font-medium transition ${
                           datumPreset === opt.id
                             ? "bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow shadow-amber-500/30"
-                            : "bg-white/5 text-slate-300 hover:bg-white/10"
+                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                         }`}
                       >
                         {opt.label}
@@ -830,7 +830,7 @@ function Index() {
               id="import"
               icon={<FileUp className="h-3.5 w-3.5" />}
               title="Import data"
-              accent="from-pink-400 to-rose-500"
+              accent="from-pink-500 to-rose-600"
               open={openSections.import}
               onToggle={toggleSection}
             >
@@ -844,12 +844,12 @@ function Index() {
                 <input ref={gisInputRef} type="file" accept=".kml,.kmz,.gpx,.geojson,.json,.csv,.tsv,.txt,.zip,.shp" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleGisFile(f); e.target.value = ""; }} />
                 <input ref={ocrInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleOcrFile(f); e.target.value = ""; }} />
                 {importBusy && (
-                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <div className="flex items-center gap-2 text-xs text-slate-500">
                     <Loader2 className="h-3.5 w-3.5 animate-spin" /> Working…
                   </div>
                 )}
                 {importStatus && (
-                  <p className="rounded-md bg-white/5 px-2 py-1.5 text-[11px] leading-relaxed text-slate-300">{importStatus}</p>
+                  <p className="rounded-md bg-slate-50 px-2 py-1.5 text-[11px] leading-relaxed text-slate-700">{importStatus}</p>
                 )}
                 <p className="text-[10px] leading-relaxed text-slate-500">
                   <strong>DWG</strong> cannot be parsed in the browser. Export from AutoCAD/QGIS as <em>DXF, SHP, KML or GeoJSON</em> first. OCR and typed UTM use the datum preset set in <em>Datum &amp; projection</em>.
@@ -862,7 +862,7 @@ function Index() {
               id="measure"
               icon={<Ruler className="h-3.5 w-3.5" />}
               title="Measure"
-              accent="from-orange-400 to-red-500"
+              accent="from-orange-500 to-red-600"
               open={openSections.measure}
               onToggle={toggleSection}
             >
@@ -876,22 +876,22 @@ function Index() {
               </div>
               {measureMode !== "none" && (
                 <div className="mt-2 space-y-1.5">
-                  <p className="text-[11px] text-slate-400">Click to add vertices · Enter or double-click to finish · Backspace to undo · Esc to cancel.</p>
+                  <p className="text-[11px] text-slate-500">Click to add vertices · Enter or double-click to finish · Backspace to undo · Esc to cancel.</p>
                   <div className="grid grid-cols-3 gap-1">
                     <SbBtn onClick={() => setMeasurePoints((p) => p.slice(0, -1))} disabled={measurePoints.length === 0}>
                       <Undo2 className="mr-1 h-3.5 w-3.5" /> Undo
                     </SbBtn>
                     <button onClick={finishMeasure} className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-600 text-xs font-semibold text-white">Done</button>
-                    <button onClick={cancelMeasure} className="rounded-md text-xs text-slate-300 hover:bg-white/5">Cancel</button>
+                    <button onClick={cancelMeasure} className="rounded-md text-xs text-slate-600 hover:bg-slate-100">Cancel</button>
                   </div>
                 </div>
               )}
               {activeProject && activeProject.measurements.length > 0 && (
                 <>
-                  <Separator className="my-3 bg-white/10" />
+                  <Separator className="my-3 bg-slate-200" />
                   <div className="mb-1 flex items-center justify-between">
-                    <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Saved · {activeProject.measurements.length}</h3>
-                    <button onClick={() => updateActive((p) => ({ ...p, measurements: [] }))} className="text-[10px] text-slate-500 hover:text-rose-400">Clear</button>
+                    <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Saved · {activeProject.measurements.length}</h3>
+                    <button onClick={() => updateActive((p) => ({ ...p, measurements: [] }))} className="text-[10px] text-slate-500 hover:text-rose-600">Clear</button>
                   </div>
                   <ul className="max-h-32 space-y-1 overflow-y-auto pr-1">
                     {activeProject.measurements.map((m, i) => {
@@ -899,11 +899,11 @@ function Index() {
                         ? formatDistance(lineDistanceMeters(m.points))
                         : formatArea(polygonAreaSqMeters(m.points));
                       return (
-                        <li key={m.id} className="group flex items-center gap-1.5 rounded-md border border-white/5 bg-white/[0.03] px-2 py-1 text-xs">
-                          <span className="font-mono text-[10px] text-orange-400/70">{String(i + 1).padStart(2, "0")}</span>
-                          <span className="flex-1 truncate text-slate-200">{m.type === "distance" ? "↔" : "▢"} {val}</span>
+                        <li key={m.id} className="group flex items-center gap-1.5 rounded-md border border-slate-100 bg-slate-50 px-2 py-1 text-xs">
+                          <span className="font-mono text-[10px] text-orange-600/70">{String(i + 1).padStart(2, "0")}</span>
+                          <span className="flex-1 truncate text-slate-700">{m.type === "distance" ? "↔" : "▢"} {val}</span>
                           <button className="opacity-0 transition group-hover:opacity-100" onClick={() => updateActive((p) => ({ ...p, measurements: p.measurements.filter((x) => x.id !== m.id) }))}>
-                            <X className="h-3.5 w-3.5 text-rose-400" />
+                            <X className="h-3.5 w-3.5 text-rose-500" />
                           </button>
                         </li>
                       );
@@ -918,7 +918,7 @@ function Index() {
               id="info"
               icon={<Info className="h-3.5 w-3.5" />}
               title="Parcel info"
-              accent="from-slate-400 to-slate-500"
+              accent="from-slate-500 to-slate-600"
               open={openSections.info}
               onToggle={toggleSection}
             >
@@ -930,14 +930,14 @@ function Index() {
                     <Row label="Perimeter" value={formatDistance(geojsonPolygonPerimeter(selected.geometry))} />
                     <Row label="Source" value={String(selected.properties?.source ?? "RIM Map")} />
                   </dl>
-                  <Separator className="my-3 bg-white/10" />
+                  <Separator className="my-3 bg-slate-200" />
                   <div className="grid grid-cols-2 gap-2">
                     <SbBtn onClick={exportGeoJSON}><Download className="mr-2 h-3.5 w-3.5" /> GeoJSON</SbBtn>
                     <SbBtn onClick={exportKML}><Download className="mr-2 h-3.5 w-3.5" /> KML</SbBtn>
                   </div>
                 </>
               ) : (
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   {hasParcels
                     ? "Click a parcel on the map or search by number."
                     : "Siana RIM parcel data not loaded yet. Once provided, parcels and their details will appear here."}
@@ -958,7 +958,7 @@ function Index() {
             ]).map(({ id, icon: Icon }) => (
               <button
                 key={id}
-                className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white/5 hover:text-cyan-300"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-cyan-600"
                 onClick={() => { setSidebarOpen(true); setOpenSections((s) => ({ ...s, [id]: true })); }}
                 title={id}
               >
@@ -997,7 +997,7 @@ function Index() {
         )}
 
         {measureMode !== "none" && (
-          <div className="pointer-events-none absolute left-1/2 top-3 z-[1000] -translate-x-1/2 rounded-full border border-orange-500/40 bg-orange-500/15 px-3 py-1.5 text-xs text-orange-100 shadow-lg backdrop-blur">
+          <div className="pointer-events-none absolute left-1/2 top-3 z-[1000] -translate-x-1/2 rounded-full border border-orange-500/40 bg-orange-500/15 px-3 py-1.5 text-xs text-orange-900 shadow-lg backdrop-blur">
             {measureMode === "distance" ? "Measure distance" : "Measure area"} — {measurePoints.length} point{measurePoints.length === 1 ? "" : "s"}
           </div>
         )}
@@ -1034,20 +1034,20 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border border-white/5 bg-white/[0.025] shadow-sm">
+    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm shadow-slate-100">
       <button
         onClick={() => onToggle(id)}
-        className="group flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left transition hover:bg-white/[0.04]"
+        className="group flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left transition hover:bg-slate-50"
       >
         <span className="flex items-center gap-2.5">
-          <span className={`flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br ${accent} text-white shadow shadow-black/30`}>
+          <span className={`flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br ${accent} text-white shadow shadow-slate-300/50`}>
             {icon}
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-200">{title}</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-700">{title}</span>
         </span>
-        <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition ${open ? "rotate-0" : "-rotate-90"}`} />
+        <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition ${open ? "rotate-0" : "-rotate-90"}`} />
       </button>
-      {open && <div className="border-t border-white/5 p-3">{children}</div>}
+      {open && <div className="border-t border-slate-200 p-3">{children}</div>}
     </section>
   );
 }
@@ -1067,7 +1067,7 @@ function SbBtn({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex items-center justify-center rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-cyan-400/30 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
+      className={`inline-flex items-center justify-center rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 transition hover:border-cyan-400/40 hover:bg-slate-100 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
     >
       {children}
     </button>
@@ -1092,7 +1092,7 @@ function ToggleBtn({
       className={`inline-flex items-center justify-center rounded-md px-2.5 py-1.5 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
         active
           ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow shadow-cyan-500/30"
-          : "border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
+          : "border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
       }`}
     >
       {children}
@@ -1102,7 +1102,7 @@ function ToggleBtn({
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <label className="mb-1 block text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">
+    <label className="mb-1 block text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
       {children}
     </label>
   );
@@ -1129,7 +1129,7 @@ function LabeledInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         inputMode={inputMode}
-        className="h-8 w-full rounded-md border border-white/10 bg-white/5 px-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/60 focus:outline-none"
+        className="h-8 w-full rounded-md border border-slate-200 bg-white px-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-cyan-500 focus:outline-none"
       />
     </div>
   );
@@ -1138,15 +1138,15 @@ function LabeledInput({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <dt className="text-[10px] uppercase tracking-[0.14em] text-slate-400">{label}</dt>
-      <dd className="text-right text-sm font-medium tabular-nums text-white">{value}</dd>
+      <dt className="text-[10px] uppercase tracking-[0.14em] text-slate-500">{label}</dt>
+      <dd className="text-right text-sm font-medium tabular-nums text-slate-900">{value}</dd>
     </div>
   );
 }
 
 function MapFallback() {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-[oklch(0.14_0.03_260)] text-sm text-slate-400">
+    <div className="flex h-full w-full items-center justify-center bg-slate-100 text-sm text-slate-600">
       Loading map…
     </div>
   );
